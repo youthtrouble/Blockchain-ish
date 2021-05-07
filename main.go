@@ -24,7 +24,7 @@ var Blockchainish []Block
 func run() error {
 	mux := spunNewRouter()
 	httpAddr := os.Getenv("ADDRESS")
-	log.Println("Listening on ", os.Getenv("ADDR"))
+	log.Println("Listening on ", os.Getenv("ADDRESS"))
 	s := &http.Server{
 		Addr:           ":" + httpAddr,
 		Handler:        mux,
