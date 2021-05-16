@@ -14,8 +14,6 @@ type Block struct {
 	PrevHash	string
 }
 
-
-
 func calculateHash(block Block) string {
 
 	record := string(block.Index) + block.Timestamp + string(block.BPM) + block.PrevHash
