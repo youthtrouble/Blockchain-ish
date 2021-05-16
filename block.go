@@ -6,6 +6,15 @@ import (
 	"time"
 )
 
+type Block struct {
+	Index		int
+	Timestamp	string
+	BPM 		int
+	Hash		string
+	PrevHash	string
+}
+
+
 
 func calculateHash(block Block) string {
 
