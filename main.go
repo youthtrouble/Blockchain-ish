@@ -154,6 +154,10 @@ func spunNewRouter() http.Handler {
 	return router
 }
 
+func handleotherConn(conn net.Conn) {
+	defer conn.Close()
+}
+
 
 func main() {
 	err := godotenv.Load()
@@ -169,12 +173,19 @@ func main() {
 	}
 	defer server.Close()
 
-	go func() {
-		t := time.Now()
-		genesisBlock := Block{0, t.String(), 0, "", ""}
-		spew.Dump(genesisBlock)
-		Blockchainish = append(Blockchainish, genesisBlock)
-	}()
+	for {
+		conn, err := server.Accept()
+		if err != nil {
+			log.Fatal(err)
+		}
+		go handleotherConn(conn)
+	}
+
+	t := time.Now()
+	genesisBlock := Block{0, t.String(), 0, "", ""}
+	spew.Dump(genesisBlock)
+	Blockchainish = append(Blockchainish, genesisBlock)
+
 	log.Fatal(run())
 
 }
