@@ -6,12 +6,10 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"github.com/davecgh/go-spew/spew"
-	//"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"io"
 	"log"
 	"net"
-	"net/http"
 	"os"
 	"strconv"
 	"time"
@@ -29,10 +27,10 @@ type Block struct {
 type Param struct {
 	BPM int
 }
-var bcServer chan []Block
-
-
-var Blockchainish []Block
+var (
+	bcServer chan []Block
+	Blockchainish []Block
+)
 
 func calculateHash(block Block) string {
 
@@ -82,79 +80,6 @@ func replaceChain(newBlocks []Block) {
 	}
 
 }
-
-func handleGetBlockchainish(w http.ResponseWriter, r *http.Request) {
-	bytes, err := json.MarshalIndent(Blockchainish, "", "  ")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	io.WriteString(w, string(bytes))
-}
-
-func handlePostBlockchainish(w http.ResponseWriter, r *http.Request) {
-	var m Param
-
-	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&m); err != nil {
-		respondWithJSON(w, r, http.StatusBadRequest, r.Body)
-		return
-	}
-	defer r.Body.Close()
-
-	newBlock, err := generateBlock(Blockchainish[len(Blockchainish)-1], m.BPM)
-	if err != nil {
-		respondWithJSON(w, r, http.StatusInternalServerError, m)
-		return
-	}
-
-	if isBlockValid(newBlock, Blockchainish[len(Blockchainish)-1]) {
-		newBlockchain := append(Blockchainish, newBlock)
-		replaceChain(newBlockchain)
-		spew.Dump(Blockchainish)
-	}
-
-	respondWithJSON(w, r, http.StatusCreated, newBlock)
-}
-
-func respondWithJSON(w http.ResponseWriter, r *http.Request, code int, payload interface{}) {
-	response, err := json.MarshalIndent(payload, "", "  ")
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("HTTP 500: Internal Server Error"))
-		return
-	}
-	w.WriteHeader(code)
-	w.Write(response)
-}
-
-
-//func run() error {
-//	mux := spunNewRouter()
-//	httpAddr := os.Getenv("ADDRESS")
-//	log.Println("Listening on ", os.Getenv("ADDRESS"))
-//	s := &http.Server{
-//		Addr:           ":" + httpAddr,
-//		Handler:        mux,
-//		ReadTimeout:    10 * time.Second,
-//		WriteTimeout:   10 * time.Second,
-//		MaxHeaderBytes: 1 << 20,
-//	}
-//
-//	if err := s.ListenAndServe(); err != nil {
-//		return err
-//	}
-//
-//	return nil
-//}
-//
-//
-//func spunNewRouter() http.Handler {
-//	router := mux.NewRouter()
-//	router.HandleFunc("/", handleGetBlockchainish).Methods("GET")
-//	router.HandleFunc("/", handlePostBlockchainish).Methods("POST")
-//	return router
-//}
 
 func handleotherConn(conn net.Conn) {
 	defer conn.Close()
@@ -221,9 +146,6 @@ func main() {
 	genesisBlock := Block{0, t.String(), 0, "", ""}
 	spew.Dump(genesisBlock)
 	Blockchainish = append(Blockchainish, genesisBlock)
-
-	//log.Fatal(run())
-
 
 	for {
 		conn, err := server.Accept()
