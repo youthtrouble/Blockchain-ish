@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -12,6 +13,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -173,6 +175,14 @@ func main() {
 	}
 	defer server.Close()
 
+	t := time.Now()
+	genesisBlock := Block{0, t.String(), 0, "", ""}
+	spew.Dump(genesisBlock)
+	Blockchainish = append(Blockchainish, genesisBlock)
+
+	log.Fatal(run())
+
+
 	for {
 		conn, err := server.Accept()
 		if err != nil {
@@ -181,12 +191,32 @@ func main() {
 		go handleotherConn(conn)
 	}
 
-	t := time.Now()
-	genesisBlock := Block{0, t.String(), 0, "", ""}
-	spew.Dump(genesisBlock)
-	Blockchainish = append(Blockchainish, genesisBlock)
+	io.WriteString(conn, "Enter a new BPM:")
 
-	log.Fatal(run())
+	scanner := bufio.NewScanner(conn)
+
+	// take in BPM from stdin and add it to blockchain after conducting necessary validation
+	go func() {
+		for scanner.Scan() {
+			bpm, err := strconv.Atoi(scanner.Text())
+			if err != nil {
+				log.Printf("%v not a number: %v", scanner.Text(), err)
+				continue
+			}
+			newBlock, err := generateBlock(Blockchainish[len(Blockchainish)-1], bpm)
+			if err != nil {
+				log.Println(err)
+				continue
+			}
+			if isBlockValid(newBlock, Blockchainish[len(Blockchainish)-1]) {
+				newBlockchain := append(Blockchainish, newBlock)
+				replaceChain(newBlockchain)
+			}
+
+			bcServer <- Blockchainish
+			io.WriteString(conn, "\nEnter a new BPM:")
+		}
+	}()
 
 }
 
