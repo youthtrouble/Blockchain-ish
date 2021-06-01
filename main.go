@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/gorilla/mux"
+	//"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"io"
 	"log"
@@ -129,32 +129,32 @@ func respondWithJSON(w http.ResponseWriter, r *http.Request, code int, payload i
 }
 
 
-func run() error {
-	mux := spunNewRouter()
-	httpAddr := os.Getenv("ADDRESS")
-	log.Println("Listening on ", os.Getenv("ADDRESS"))
-	s := &http.Server{
-		Addr:           ":" + httpAddr,
-		Handler:        mux,
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
-		MaxHeaderBytes: 1 << 20,
-	}
-
-	if err := s.ListenAndServe(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-
-func spunNewRouter() http.Handler {
-	router := mux.NewRouter()
-	router.HandleFunc("/", handleGetBlockchainish).Methods("GET")
-	router.HandleFunc("/", handlePostBlockchainish).Methods("POST")
-	return router
-}
+//func run() error {
+//	mux := spunNewRouter()
+//	httpAddr := os.Getenv("ADDRESS")
+//	log.Println("Listening on ", os.Getenv("ADDRESS"))
+//	s := &http.Server{
+//		Addr:           ":" + httpAddr,
+//		Handler:        mux,
+//		ReadTimeout:    10 * time.Second,
+//		WriteTimeout:   10 * time.Second,
+//		MaxHeaderBytes: 1 << 20,
+//	}
+//
+//	if err := s.ListenAndServe(); err != nil {
+//		return err
+//	}
+//
+//	return nil
+//}
+//
+//
+//func spunNewRouter() http.Handler {
+//	router := mux.NewRouter()
+//	router.HandleFunc("/", handleGetBlockchainish).Methods("GET")
+//	router.HandleFunc("/", handlePostBlockchainish).Methods("POST")
+//	return router
+//}
 
 func handleotherConn(conn net.Conn) {
 	defer conn.Close()
@@ -185,6 +185,21 @@ func handleotherConn(conn net.Conn) {
 			io.WriteString(conn, "\nEnter a new BPM:")
 		}
 	}()
+
+	go func() {
+		for {
+			time.Sleep(30 * time.Second)
+			newout, err := json.Marshal(Blockchainish)
+			if err != nil {
+				log.Fatal(err)
+			}
+			io.WriteString(conn, string(newout))
+		}
+	}()
+
+	for _ = range bcServer {
+		spew.Dump(Blockchainish)
+	}
 }
 
 
@@ -207,7 +222,7 @@ func main() {
 	spew.Dump(genesisBlock)
 	Blockchainish = append(Blockchainish, genesisBlock)
 
-	log.Fatal(run())
+	//log.Fatal(run())
 
 
 	for {
