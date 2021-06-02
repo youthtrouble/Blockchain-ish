@@ -119,6 +119,7 @@ func handleotherConn(conn net.Conn) {
 				log.Fatal(err)
 			}
 			io.WriteString(conn, string(newout))
+			io.WriteString(conn, "\nEnter a new BPM:")
 		}
 	}()
 
