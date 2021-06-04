@@ -1,4 +1,4 @@
-module Blockchain-ish
+module Blockchain_ish
 
 go 1.16
 
