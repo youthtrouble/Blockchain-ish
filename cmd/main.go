@@ -63,7 +63,7 @@ func handleotherConn(conn net.Conn) {
 	go func() {
 		for {
 			time.Sleep(30 * time.Second)
-			newout, err := json.Marshal(Blockchainish)
+			newout, err := json.MarshalIndent(Blockchainish, "", "  ")
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -93,7 +93,7 @@ func main() {
 	defer server.Close()
 
 	t := time.Now()
-	genesisBlock := Blockchain_ish.Block{0, t.String(), "10", "", "", ""}
+	genesisBlock := Blockchain_ish.Block{0, t.String(), "", "", "", ""}
 	spew.Dump(genesisBlock)
 	Blockchainish = append(Blockchainish, genesisBlock)
 
