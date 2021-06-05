@@ -2,7 +2,7 @@
 This project is being built to ground my basic knowledge of crypto and the Blockchain. It is not necessarily practical 
 because it is based off the assumptions that:  
 - Every node that wants to  contribute, owns a thermometer.
-- No node wants to replicate the [Google Maps Big Data flaw](https://news.artnet.com/art-world/artist-simon-weckert-google-map-hack-1769187) in this context, in the event that the Practical Improvements
+- No node wants to replicate the [Google Maps Big Data hack](https://news.artnet.com/art-world/artist-simon-weckert-google-map-hack-1769187) in this context, in the event that the Practical Improvements
 explained below are implemented.
   
 ### How it works locally
