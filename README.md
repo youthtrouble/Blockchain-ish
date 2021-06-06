@@ -17,13 +17,13 @@ on the [TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol) networ
   
 - Fill the prompt for the Temperature Info using the format `Temperature(in degrees celsius), Location`.
     - The prompt generates a new Block based on the input and adds it to the Blockchain on the main terminal. 
-    -  In 30-second Intervals, these other nodes(terminals)
+    -  At 30-second Intervals, these other nodes(terminals)
    are updated with a verified copy of the Blockchain.
   
 
 ### Practical Improvements
 
-In the event that the aforementioned assumptions are true in th real-world, ere are some ideas
+In the event that the aforementioned assumptions are true in the real-world, here are some ideas
  that could make this project practical:
 
 - Sorting and analysis: The data could be sorted and analyzed over a specific time period using practical weather optimized Algorithms
