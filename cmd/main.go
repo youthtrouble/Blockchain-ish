@@ -42,8 +42,8 @@ func handleotherConn(conn net.Conn) {
 			tempInfo := scanner.Text()
 
 			s := strings.Split(tempInfo, ",")
-			Temperature := s[0]
-			Location:= s[1]
+			Temperature := s[1]
+			Location:= s[0]
 
 			newBlock, err := Blockchain_ish.GenerateBlock(Blockchainish[len(Blockchainish)-1], Temperature, Location)
 			if err != nil {
