@@ -35,6 +35,7 @@ In the event that the aforementioned assumptions are true in the real-world, her
 
 ## Example
 
-![Screenshot from 2021-06-05 17-05-29](https://user-images.githubusercontent.com/47859940/120898024-14cafd80-c621-11eb-9526-28cc4e728ff0.png)
+![Screenshot from 2021-06-18 01-05-44](https://user-images.githubusercontent.com/47859940/122487015-1eb21080-cfd2-11eb-96bb-2983e985f5a5.png)
+
 
 
