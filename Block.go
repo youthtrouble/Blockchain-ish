@@ -10,7 +10,7 @@ import (
 type Block struct {
 	Index		int
 	Timestamp	string
-	TEMPERATURE string
+	TEMPERATURE	string
 	Location	string  //considered using time.Location but that only provides the timezone so better not to :)
 	Hash		string
 	PrevHash	string
